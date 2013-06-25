@@ -170,6 +170,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		}
 	}
 
+    public void setTabContainerGravity(int gravity) {
+        tabsContainer.setGravity(gravity);
+    }
+
 	public void setViewPager(ViewPager pager) {
 		this.pager = pager;
 
