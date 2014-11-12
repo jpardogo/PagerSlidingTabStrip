@@ -291,15 +291,21 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			return;
 		}
 
-		int newScrollX = tabsContainer.getChildAt(position).getLeft() + offset;
-
-		if (position > 0 || offset > 0) {
-			newScrollX -= scrollOffset;
+		if (position == 0 && offset ==0)
+		{
+			scrollTo(0, 0);
 		}
+		else
+		{
+			int newScrollX = tabsContainer.getChildAt(position).getLeft() + offset ;
+			newScrollX -= scrollOffset;
+					
+			if (newScrollX != lastScrollX) 
+			{
+				lastScrollX = newScrollX;
+				scrollTo(newScrollX, 0);
+			}
 
-		if (newScrollX != lastScrollX) {
-			lastScrollX = newScrollX;
-			scrollTo(newScrollX, 0);
 		}
 
 	}
