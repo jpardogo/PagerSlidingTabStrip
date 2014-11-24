@@ -13,7 +13,7 @@ Android Support Library.
   1. Include the following dependency to your gradle file.
 
 ```groovy
-    compile 'com.jpardogo.materialtabstrip:library:1.0.5'
+    compile 'com.jpardogo.materialtabstrip:library:1.0.6'
 ```
   Or add the library as a project. I tried to send a pull request, but looks like the original
   developer doesn't maintain it anymore.
