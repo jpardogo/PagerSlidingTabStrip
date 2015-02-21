@@ -15,8 +15,6 @@
         <attr name="pstsShouldExpand" format="boolean" />
         <attr name="pstsTextAllCaps" format="boolean" />
         <attr name="pstsPaddingMiddle" format="boolean" />
-        <attr name="pstsTextColorSelected" format="color" />
-        <attr name="pstsTextAlpha" format="integer" />
         <attr name="pstsTextStyle">
             <flag name="normal" value="0x0" />
             <flag name="bold" value="0x1" />
