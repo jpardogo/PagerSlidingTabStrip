@@ -245,6 +245,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 tabView = ((CustomTabProvider) pager.getAdapter()).getCustomTabView(this, i);
             } else {
                 tabView = LayoutInflater.from(getContext()).inflate(R.layout.psts_tab, this, false);
+                updateTabStyle(tabView);
             }
 
             CharSequence title = pager.getAdapter().getPageTitle(i);
@@ -252,7 +253,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             addTab(i, title, tabView);
         }
 
-        updateTabStyles();
         getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
             @SuppressWarnings("deprecation")
@@ -292,23 +292,27 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         tabsContainer.addView(tabView, position, shouldExpand ? expandedTabLayoutParams : defaultTabLayoutParams);
     }
 
-    private void updateTabStyles() {
+    private void updateAllTabStyles() {
         for (int i = 0; i < tabCount; i++) {
             View v = tabsContainer.getChildAt(i);
-            v.setBackgroundResource(tabBackgroundResId);
-            v.setPadding(tabPadding, v.getPaddingTop(), tabPadding, v.getPaddingBottom());
-            TextView tab_title = (TextView) v.findViewById(R.id.psts_tab_title);
+            updateTabStyle(v);
+        }
+    }
 
-            if (tab_title != null) {
-                tab_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
-                // setAllCaps() is only available from API 14, so the upper case is made manually if we are on a
-                // pre-ICS-build
-                if (textAllCaps) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        tab_title.setAllCaps(true);
-                    } else {
-                        tab_title.setText(tab_title.getText().toString().toUpperCase(locale));
-                    }
+    public void updateTabStyle(View tabView) {
+        tabView.setBackgroundResource(tabBackgroundResId);
+        tabView.setPadding(tabPadding, tabView.getPaddingTop(), tabPadding, tabView.getPaddingBottom());
+        TextView tab_title = (TextView) tabView.findViewById(R.id.psts_tab_title);
+
+        if (tab_title != null) {
+            tab_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
+            // setAllCaps() is only available from API 14, so the upper case is made manually if we are on a
+            // pre-ICS-build
+            if (textAllCaps) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    tab_title.setAllCaps(true);
+                } else {
+                    tab_title.setText(tab_title.getText().toString().toUpperCase(locale));
                 }
             }
         }
@@ -730,7 +734,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void setTextSize(int textSizePx) {
         this.tabTextSize = textSizePx;
-        updateTabStyles();
+        updateAllTabStyles();
     }
 
     public void setTextColor(int textColor) {
@@ -743,7 +747,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void setTextColor(ColorStateList colorStateList) {
         this.tabTextColor = colorStateList;
-        updateTabStyles();
+        updateAllTabStyles();
     }
 
     public void setTextColorResource(int resId) {
@@ -757,7 +761,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public void setTypeface(Typeface typeface, int style) {
         this.tabTypeface = typeface;
         this.tabTypefaceSelectedStyle = style;
-        updateTabStyles();
+        updateAllTabStyles();
     }
 
     public void setTabBackground(int resId) {
@@ -766,6 +770,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void setTabPaddingLeftRight(int paddingPx) {
         this.tabPadding = paddingPx;
-        updateTabStyles();
+        updateAllTabStyles();
     }
 }
