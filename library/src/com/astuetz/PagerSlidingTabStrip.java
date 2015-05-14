@@ -209,7 +209,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         dividerPaint.setStrokeWidth(dividerWidth);
 
         defaultTabLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        expandedTabLayoutParams = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1.0f);
+        expandedTabLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1.0f);
 
         if (locale == null) {
             locale = getResources().getConfiguration().locale;
