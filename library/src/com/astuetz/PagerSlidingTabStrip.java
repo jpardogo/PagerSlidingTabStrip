@@ -16,7 +16,6 @@
 
 package com.astuetz;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -253,20 +252,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         }
 
         updateTabStyles();
-        getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-
-            @SuppressWarnings("deprecation")
-            @SuppressLint("NewApi")
-            @Override
-            public void onGlobalLayout() {
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                } else {
-                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            }
-        });
     }
 
     private void addTab(final int position, CharSequence title, View tabView) {
