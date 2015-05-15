@@ -65,6 +65,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             android.R.attr.padding,
             android.R.attr.paddingLeft,
             android.R.attr.paddingRight,
+            android.R.attr.clickable
     };
     // @formatter:on
 
@@ -77,6 +78,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private static final int PADDING_INDEX = 3;
     private static final int PADDING_LEFT_INDEX = 4;
     private static final int PADDING_RIGHT_INDEX = 5;
+    private static final int CLICKABLE_INDEX = 6;
 
     private LinearLayout.LayoutParams defaultTabLayoutParams;
     private LinearLayout.LayoutParams expandedTabLayoutParams;
@@ -168,6 +170,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         int padding = a.getDimensionPixelSize(PADDING_INDEX, 0);
         paddingLeft = padding > 0 ? padding : a.getDimensionPixelSize(PADDING_LEFT_INDEX, 0);
         paddingRight = padding > 0 ? padding : a.getDimensionPixelSize(PADDING_RIGHT_INDEX, 0);
+        setClickable(a.getBoolean(CLICKABLE_INDEX, true));
         a.recycle();
 
         // get custom attrs
@@ -269,6 +272,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         });
     }
 
+    @Override
+    public void setClickable(boolean clickable) {
+        for (int i = 0; i < tabsContainer.getChildCount(); i++) {
+            tabsContainer.getChildAt(i).setClickable(clickable);
+        }
+        super.setClickable(clickable);
+    }
+
     private void addTab(final int position, CharSequence title, View tabView) {
         TextView textView = (TextView) tabView.findViewById(R.id.psts_tab_title);
         if (textView != null) {
@@ -279,15 +290,17 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         tabView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pager.getCurrentItem() != position) {
-                    View tab = tabsContainer.getChildAt(pager.getCurrentItem());
-                    notSelected(tab);
-                    pager.setCurrentItem(position);
-                } else if (tabReselectedListener != null) {
-                    tabReselectedListener.onTabReselected(position);
-                }
+                    if (pager.getCurrentItem() != position) {
+                        View tab = tabsContainer.getChildAt(pager.getCurrentItem());
+                        notSelected(tab);
+                        pager.setCurrentItem(position);
+                    } else if (tabReselectedListener != null) {
+                        tabReselectedListener.onTabReselected(position);
+                    }
             }
         });
+
+        tabView.setClickable(isClickable());
 
         tabsContainer.addView(tabView, position, shouldExpand ? expandedTabLayoutParams : defaultTabLayoutParams);
     }
