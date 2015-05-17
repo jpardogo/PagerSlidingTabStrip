@@ -25,6 +25,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Parcel;
@@ -35,10 +36,12 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -108,6 +111,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private int tabPadding = 12;
     private int tabTextSize = 14;
+    private int tabFixedWidth = 0;
     private ColorStateList tabTextColor = null;
     private ColorStateList tabTextColorSelected = null;
     private int textAlpha = 150;
@@ -118,6 +122,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private boolean shouldExpand = false;
     private boolean textAllCaps = true;
     private boolean isPaddingMiddle = false;
+    private boolean fixedSize = false;
 
     private Typeface tabTypeface = null;
     private int tabTypefaceStyle = Typeface.BOLD;
@@ -185,6 +190,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         scrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsScrollOffset, scrollOffset);
         textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
         isPaddingMiddle = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsPaddingMiddle, isPaddingMiddle);
+        fixedSize = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsFixedSize, fixedSize);
         tabTypefaceStyle = a.getInt(R.styleable.PagerSlidingTabStrip_pstsTextStyle, Typeface.BOLD);
         tabTypefaceSelectedStyle = a.getInt(R.styleable.PagerSlidingTabStrip_pstsTextSelectedStyle, Typeface.BOLD);
         tabTextColorSelected = a.getColorStateList(R.styleable.PagerSlidingTabStrip_pstsTextColorSelected);
@@ -227,6 +233,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         this.pager = pager;
         if (pager.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
+        }
+        
+        if (fixedSize) {
+            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            tabFixedWidth = size.x / pager.getAdapter().getCount();
         }
 
         pager.setOnPageChangeListener(pageListener);
@@ -273,6 +287,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         TextView textView = (TextView) tabView.findViewById(R.id.psts_tab_title);
         if (textView != null) {
             if (title != null) textView.setText(title);
+        }
+
+        if (fixedSize && tabFixedWidth > 0) {
+            textView.setWidth(tabFixedWidth);
         }
 
         tabView.setFocusable(true);
@@ -376,6 +394,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private OnGlobalLayoutListener firstTabGlobalLayoutListener = new OnGlobalLayoutListener() {
 
+        @SuppressWarnings("deprecation")
+        @SuppressLint("NewApi")
         @Override
         public void onGlobalLayout() {
             View view = tabsContainer.getChildAt(0);
@@ -767,5 +787,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public void setTabPaddingLeftRight(int paddingPx) {
         this.tabPadding = paddingPx;
         updateTabStyles();
+    }
+
+    public void setFixedSize(boolean fixedSize) {
+        this.fixedSize = fixedSize;
+    }
+
+    public boolean isFixedSize() {
+        return fixedSize;
     }
 }
