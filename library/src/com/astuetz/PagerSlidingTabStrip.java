@@ -97,13 +97,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private boolean isExpandTabs = false;
     private boolean isCustomTabs;
-  //  private boolean isPaddingMiddle = false;
+    //  private boolean isPaddingMiddle = false;
     private boolean isTabTextAllCaps = true;
 
     //sets the gravity of tabs to either start in middle or left hand side and fill screen
-    public static  int center =0;
-    public static  int centerScroll =1;
-    public static  int left =2;
+    public static int center = 0;
+    public static int centerScroll = 1;
+    public static int left = 2;
     public static int fillAndCenter = 3;
     private int tabAlignment = left;
 
@@ -177,7 +177,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         mDividerPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsDividerPadding, mDividerPadding);
         isExpandTabs = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldExpand, isExpandTabs);
         mScrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsScrollOffset, mScrollOffset);
-       // isPaddingMiddle = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsPaddingMiddle, isPaddingMiddle);
+        // isPaddingMiddle = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsPaddingMiddle, isPaddingMiddle);
         tabAlignment = a.getInt(R.styleable.PagerSlidingTabStrip_pstsTabAlignment, tabAlignment);
         mTabPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsTabPaddingLeftRight, mTabPadding);
         mTabBackgroundResId = a.getResourceId(R.styleable.PagerSlidingTabStrip_pstsTabBackground, mTabBackgroundResId);
@@ -254,7 +254,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private void addTab(final int position, CharSequence title, View tabView) {
         TextView textView = (TextView) tabView.findViewById(R.id.psts_tab_title);
         if (textView != null) {
-            if (title != null) textView.setText(title);
+            if (title != null)
+                textView.setText(title);
         }
 
         tabView.setFocusable(true);
@@ -379,48 +380,45 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 mPaddingLeft = mPaddingRight = getWidth() / 2 - mHalfWidthFirstTab;
             }
             if (tabAlignment == center) {
-                int mTabMArginWidth = view.getWidth() / mTabCount;
+                int sumOfTabWidth = 0;
+                for (int x = 0; x <= mTabCount - 1; x++) {
+                    sumOfTabWidth = sumOfTabWidth + mTabsContainer.getChildAt(x).getWidth();
 
-                int sumOfTabWidth =0;
-               for(int x = 0; x <= mTabCount -1; x++){
-                 sumOfTabWidth = sumOfTabWidth + mTabsContainer.getChildAt(x).getWidth();
-
-               }
-                if(sumOfTabWidth < getWidth()){
-                    mPaddingLeft = mPaddingRight = (getWidth()-sumOfTabWidth)/2;
-                }else {
+                }
+                if (sumOfTabWidth < getWidth()) {
+                    mPaddingLeft = mPaddingRight = (getWidth() - sumOfTabWidth) / 2;
+                } else {
                     mPaddingLeft = mPaddingRight = 0;
                 }
-                 }
-            if(tabAlignment == fillAndCenter){
+            }
+            if (tabAlignment == fillAndCenter) {
 
                 mPaddingLeft = mPaddingRight = 0;
-                int sumOfTabWidth =0;
-                int tabLayoutMargin =0;
-                for(int x = 0; x <= mTabCount -1; x++){
+                int sumOfTabWidth = 0;
+                int tabLayoutMargin = 0;
+                for (int x = 0; x <= mTabCount - 1; x++) {
                     sumOfTabWidth = sumOfTabWidth + mTabsContainer.getChildAt(x).getWidth();
-                 //   Log.i("Ff" + getWidth(), "d=sum = " + sumOfTabWidth);
-                }
 
-               //whatch out in if for sums greater then get width
-                tabLayoutMargin= (getWidth() - sumOfTabWidth)/(mTabCount*2);
-                for(int x = 0; x <= mTabCount -1; x++){
-                   LinearLayout.LayoutParams layoutParams=  new LinearLayout.LayoutParams( LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams.setMargins(tabLayoutMargin, getHeight()/4, tabLayoutMargin, getHeight()/4);
-                    mTabsContainer.getChildAt(x).setLayoutParams(layoutParams);
-
-                    //   Log.i("Ff" + getWidth(), "d=sum = " + sumOfTabWidth);
                 }
 
 
+                tabLayoutMargin = (getWidth() - sumOfTabWidth) / (mTabCount * 2);
+                //only will fit if the width is greater then the sum of the tab widths to avoid overlaps
+                if (getWidth() > sumOfTabWidth) {
+                    for (int x = 0; x <= mTabCount - 1; x++) {
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        layoutParams.setMargins(tabLayoutMargin, getHeight() / 4, tabLayoutMargin, getHeight() / 4);
+                        mTabsContainer.getChildAt(x).setLayoutParams(layoutParams);
+                    }
 
-
+                }
 
 
             }
 
             setPadding(mPaddingLeft, getPaddingTop(), mPaddingRight, getPaddingBottom());
-            if (mScrollOffset == 0) mScrollOffset = getWidth() / 2 - mPaddingLeft;
+            if (mScrollOffset == 0)
+                mScrollOffset = getWidth() / 2 - mPaddingLeft;
             mCurrentPosition = mPager.getCurrentItem();
             mCurrentPositionOffset = 0f;
             scrollToChild(mCurrentPosition, 0);
@@ -545,7 +543,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (tab_title != null) {
                 tab_title.setSelected(false);
             }
-            if (isCustomTabs) ((CustomTabProvider) mPager.getAdapter()).tabUnselected(tab);
+            if (isCustomTabs)
+                ((CustomTabProvider) mPager.getAdapter()).tabUnselected(tab);
         }
     }
 
@@ -555,7 +554,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (tab_title != null) {
                 tab_title.setSelected(true);
             }
-            if (isCustomTabs) ((CustomTabProvider) mPager.getAdapter()).tabSelected(tab);
+            if (isCustomTabs)
+                ((CustomTabProvider) mPager.getAdapter()).tabSelected(tab);
         }
     }
 
@@ -795,18 +795,16 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
 
-
-    public void setTabAlignment(int gravityType) {
-        switch (gravityType){
-            case 0:
-            case 1:
-            case 2:
-                default:
-                    break;
+    public void setTabAlignment(int Alignment) {
+        switch (Alignment) {
+            case 0: tabAlignment =center;
+            case 1:tabAlignment = centerScroll;
+            case 2: tabAlignment =left;
+            case 3:tabAlignment = fillAndCenter;
+            default:tabAlignment =left;
+                break;
 
         }
-
-
 
         updateTabStyles();
     }

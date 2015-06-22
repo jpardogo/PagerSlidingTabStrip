@@ -70,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
         pager.setPageMargin(pageMargin);
-        pager.setCurrentItem(0);
+        pager.setCurrentItem(1);
         changeColor(getResources().getColor(R.color.green));
 
         tabs.setOnTabReselectedListener(new PagerSlidingTabStrip.OnTabReselectedListener() {
@@ -136,9 +136,8 @@ public class MainActivity extends ActionBarActivity {
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = {"Categories", "Home", "Top Paid"};
-      //  , "Top Free", "Top Grossing", "Top New Paid",
-             ///   "Top New Free", "Trending"
+        private final String[] TITLES = {"Categories", "Home", "Top Paid", "Top Free", "Top Grossing", "Top New Paid",  "Top New Free", "Trending"};
+
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }
