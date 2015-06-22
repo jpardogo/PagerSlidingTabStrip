@@ -2,28 +2,36 @@
 <resources>
 
     <declare-styleable name="PagerSlidingTabStrip">
-        <attr name="pstsIndicatorColor" format="color" />
-        <attr name="pstsIndicatorHeight" format="dimension" />
-        <attr name="pstsUnderlineColor" format="color" />
-        <attr name="pstsUnderlineHeight" format="dimension" />
-        <attr name="pstsDividerColor" format="color" />
-        <attr name="pstsDividerWidth" format="dimension" />
-        <attr name="pstsDividerPadding" format="dimension" />
-        <attr name="pstsScrollOffset" format="dimension" />
-        <attr name="pstsShouldExpand" format="boolean" />
-        <attr name="pstsPaddingMiddle" format="boolean" />
-        <attr name="pstsTabPaddingLeftRight" format="dimension" />
-        <attr name="pstsTabBackground" format="reference" />
-        <attr name="pstsTabTextSize" format="dimension" />
-        <attr name="pstsTabTextColor" format="reference" />
+        <attr name="pstsIndicatorColor" format="color"/>
+        <attr name="pstsIndicatorHeight" format="dimension"/>
+        <attr name="pstsUnderlineColor" format="color"/>
+        <attr name="pstsUnderlineHeight" format="dimension"/>
+        <attr name="pstsDividerColor" format="color"/>
+        <attr name="pstsDividerWidth" format="dimension"/>
+        <attr name="pstsDividerPadding" format="dimension"/>
+        <attr name="pstsScrollOffset" format="dimension"/>
+        <attr name="pstsShouldExpand" format="boolean"/>
+        <!--<attr name="pstsPaddingMiddle" format="boolean"/>-->
+        <attr name="pstsTabPaddingLeftRight" format="dimension"/>
+        <attr name="pstsTabBackground" format="reference"/>
+        <attr name="pstsTabTextSize" format="dimension"/>
+        <attr name="pstsTabTextColor" format="reference"/>
         <attr name="pstsTabTextStyle" format="reference">
-            <flag name="normal" value="0x0" />
-            <flag name="bold" value="0x1" />
-            <flag name="italic" value="0x2" />
+            <flag name="normal" value="0x0"/>
+            <flag name="bold" value="0x1"/>
+            <flag name="italic" value="0x2"/>
         </attr>
-        <attr name="pstsTabTextAllCaps" format="boolean" />
-        <attr name="pstsTabTextAlpha" format="integer" />
-        <attr name="pstsTabTextFontFamily" format="string" />
+        <attr name="pstsTabTextAllCaps" format="boolean"/>
+        <attr name="pstsTabTextAlpha" format="integer"/>
+        <attr name="pstsTabTextFontFamily" format="string"/>
+        <attr name="pstsTabAlignment" format="enum">
+            <enum name="center_tabs" value="0"/>
+            <enum name="middle_scroll" value="1"/>
+            <enum name="left" value="2"/>
+            <enum name="center_fill" value="3"/>
+        </attr>
+
+
     </declare-styleable>
 
 </resources>
