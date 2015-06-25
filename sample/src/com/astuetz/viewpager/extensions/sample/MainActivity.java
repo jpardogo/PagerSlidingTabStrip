@@ -67,6 +67,7 @@ public class MainActivity extends ActionBarActivity {
         adapter = new MyPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         tabs.setViewPager(pager);
+        tabs.setAllCaps(false);
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
         pager.setPageMargin(pageMargin);
@@ -79,6 +80,8 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(MainActivity.this, "Tab reselected: " + position, Toast.LENGTH_SHORT).show();
             }
         });
+      tabs.setTabAlignment(PagerSlidingTabStrip.fillAndCenter);
+
     }
 
     @Override
@@ -136,8 +139,9 @@ public class MainActivity extends ActionBarActivity {
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = {"Categories", "Home", "Top Paid", "Top Free", "Top Grossing", "Top New Paid",
-                "Top New Free", "Trending"};
+        private final String[] TITLES = {"Categories", "Home", "Top Paid"};
+
+
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
