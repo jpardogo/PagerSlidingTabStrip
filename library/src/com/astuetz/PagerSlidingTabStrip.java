@@ -611,7 +611,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     static class SavedState extends BaseSavedState {
         int currentPosition;
-        int previousPosition;
 
         public SavedState(Parcelable superState) {
             super(superState);
