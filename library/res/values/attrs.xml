@@ -11,6 +11,7 @@
         <attr name="pstsDividerPadding" format="dimension" />
         <attr name="pstsScrollOffset" format="dimension" />
         <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsAnimateIndicator" format="boolean" />
         <attr name="pstsPaddingMiddle" format="boolean" />
         <attr name="pstsTabPaddingLeftRight" format="dimension" />
         <attr name="pstsTabBackground" format="reference" />
