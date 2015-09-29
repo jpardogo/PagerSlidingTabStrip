@@ -441,17 +441,19 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         float lineRight = currentTab.getRight();
         // if there is an offset, start interpolating left and right coordinates between current and next tab
         if (mCurrentPositionOffset > 0f && mCurrentPosition < mTabCount - 1) {
+            float fromLeft = lineLeft;
+            float fromRight = lineRight;
             View nextTab = mTabsContainer.getChildAt(mCurrentPosition + 1);
             final float nextTabLeft = nextTab.getLeft();
             final float nextTabRight = nextTab.getRight();
             float interpolatedOffset = getInterpolatedOffset(mCurrentPositionOffset);
 
             if (mPreviousPosition > mCurrentPosition) { // Going left
-                lineLeft = (mCurrentPositionOffset * nextTabLeft + (1f - mCurrentPositionOffset) * lineLeft);
-                lineRight = (interpolatedOffset * nextTabRight + (1f - interpolatedOffset) * lineRight);
+                lineLeft = fromLeft - ((fromLeft - nextTabLeft) * mCurrentPositionOffset);
+                lineRight = fromRight - ((fromRight - nextTabRight) * interpolatedOffset);
             } else { // Going right
-                lineLeft = (interpolatedOffset * nextTabLeft + (1f - interpolatedOffset) * lineLeft);
-                lineRight = (mCurrentPositionOffset * nextTabRight + (1f - mCurrentPositionOffset) * lineRight);
+                lineLeft = fromLeft + ((nextTabLeft - fromLeft) * interpolatedOffset);
+                lineRight = fromRight + ((nextTabRight - fromRight) * mCurrentPositionOffset);
             }
         }
 
@@ -459,9 +461,12 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     private float getInterpolatedOffset(float offset) {
-        // y=t^2f
-        double f = .1;
-        return (float) Math.pow(offset, (2 * f));
+        // Using the anticipate interpolator algorithm
+        // (T+1)×t^3–T×t^2
+        double T = 0.5;
+        double firstPart = (T + 1) * offset * offset * offset;
+        double secondPart = (T * offset * offset);
+        return (float) (firstPart - secondPart);
     }
 
     public void setOnTabReselectedListener(OnTabReselectedListener tabReselectedListener) {
