@@ -73,7 +73,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int mTabCount;
 
     private int mCurrentPosition = 0;
-    private int mPreviousPosition = 0;
     private float mCurrentPositionOffset = 0f;
 
     private Paint mRectPaint;
@@ -100,7 +99,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private boolean isCustomTabs;
     private boolean isPaddingMiddle = false;
     private boolean isTabTextAllCaps = true;
-    private boolean isAnimateIndicator = false;
 
     private Typeface mTabTextTypeface = null;
     private int mTabTextTypefaceStyle = Typeface.BOLD;
@@ -171,7 +169,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         mDividerWidth = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsDividerWidth, mDividerWidth);
         mDividerPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsDividerPadding, mDividerPadding);
         isExpandTabs = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldExpand, isExpandTabs);
-        isAnimateIndicator = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsAnimateIndicator, isAnimateIndicator);
         mScrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsScrollOffset, mScrollOffset);
         isPaddingMiddle = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsPaddingMiddle, isPaddingMiddle);
         mTabPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsTabPaddingLeftRight, mTabPadding);
@@ -314,7 +311,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
-    private Pair<Float, Float> getIndicatorCoordinates() {
+    public Pair<Float, Float> getIndicatorCoordinates() {
         // default: line below current tab
         View currentTab = mTabsContainer.getChildAt(mCurrentPosition);
         float lineLeft = currentTab.getLeft();
@@ -328,7 +325,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             lineRight = (mCurrentPositionOffset * nextTabRight + (1f - mCurrentPositionOffset) * lineRight);
         }
 
-        return new Pair<>(lineLeft, lineRight);
+        return new Pair<Float, Float>(lineLeft, lineRight);
     }
 
     @Override
@@ -376,7 +373,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
             setPadding(mPaddingLeft, getPaddingTop(), mPaddingRight, getPaddingBottom());
             if (mScrollOffset == 0) mScrollOffset = getWidth() / 2 - mPaddingLeft;
-            mPreviousPosition = mCurrentPosition;
             mCurrentPosition = mPager.getCurrentItem();
             mCurrentPositionOffset = 0f;
             scrollToChild(mCurrentPosition, 0);
@@ -406,7 +402,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         if (mDividerWidth > 0) {
             mDividerPaint.setStrokeWidth(mDividerWidth);
             mDividerPaint.setColor(mDividerColor);
-            mRectPaint.setStyle(Style.FILL);
             for (int i = 0; i < mTabCount - 1; i++) {
                 View tab = mTabsContainer.getChildAt(i);
                 canvas.drawLine(tab.getRight(), mDividerPadding, tab.getRight(), height - mDividerPadding, mDividerPaint);
@@ -416,53 +411,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         // draw underline
         if (mUnderlineHeight > 0) {
             mRectPaint.setColor(mUnderlineColor);
-            mRectPaint.setStyle(Style.FILL);
             canvas.drawRect(mPaddingLeft, height - mUnderlineHeight, mTabsContainer.getWidth() + mPaddingRight, height, mRectPaint);
         }
 
         // draw indicator line
         if (mIndicatorHeight > 0) {
             mRectPaint.setColor(mIndicatorColor);
-            mRectPaint.setStyle(Style.FILL_AND_STROKE);
-            Pair<Float, Float> lines;
-            if (isAnimateIndicator && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)) {
-                lines = getAnimatedIndicatorCoordinates();
-            } else {
-                lines = getIndicatorCoordinates();
-            }
+            Pair<Float, Float> lines = getIndicatorCoordinates();
             canvas.drawRect(lines.first + mPaddingLeft, height - mIndicatorHeight, lines.second + mPaddingLeft, height, mRectPaint);
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private Pair<Float, Float> getAnimatedIndicatorCoordinates() {
-        // default: line below current tab
-        View currentTab = mTabsContainer.getChildAt(mCurrentPosition);
-        float lineLeft = currentTab.getLeft();
-        float lineRight = currentTab.getRight();
-        // if there is an offset, start interpolating left and right coordinates between current and next tab
-        if (mCurrentPositionOffset > 0f && mCurrentPosition < mTabCount - 1) {
-            View nextTab = mTabsContainer.getChildAt(mCurrentPosition + 1);
-            final float nextTabLeft = nextTab.getLeft();
-            final float nextTabRight = nextTab.getRight();
-            float interpolatedOffset = getNewOffset(mCurrentPositionOffset);
-
-            if (mPreviousPosition > mCurrentPosition) { // Going left
-                lineLeft = (mCurrentPositionOffset * nextTabLeft + (1f - mCurrentPositionOffset) * lineLeft);
-                lineRight = (interpolatedOffset * nextTabRight + (1f - interpolatedOffset) * lineRight);
-            } else { // Going right
-                lineLeft = (interpolatedOffset * nextTabLeft + (1f - interpolatedOffset) * lineLeft);
-                lineRight = (mCurrentPositionOffset * nextTabRight + (1f - mCurrentPositionOffset) * lineRight);
-            }
-        }
-
-        return new Pair<>(lineLeft, lineRight);
-    }
-
-    private float getNewOffset(float offset) {
-        // y=t^2f
-        double f = .1;
-        return (float) Math.pow(offset, (2 * f));
     }
 
     public void setOnTabReselectedListener(OnTabReselectedListener tabReselectedListener) {
@@ -598,7 +555,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        mPreviousPosition = savedState.previousPosition;
         mCurrentPosition = savedState.currentPosition;
         if (mCurrentPosition != 0 && mTabsContainer.getChildCount() > 0) {
             unSelect(mTabsContainer.getChildAt(0));
@@ -611,14 +567,12 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState savedState = new SavedState(superState);
-        savedState.previousPosition = mPreviousPosition;
         savedState.currentPosition = mCurrentPosition;
         return savedState;
     }
 
     static class SavedState extends BaseSavedState {
         int currentPosition;
-        int previousPosition;
 
         public SavedState(Parcelable superState) {
             super(superState);
@@ -702,6 +656,23 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public int getTabPaddingLeftRight() {
         return mTabPadding;
+    }
+
+    public LinearLayout getmTabsContainer() {
+        return mTabsContainer;
+    }
+
+    public int getmTabCount() {
+        return mTabCount;
+    }
+
+    public int getmCurrentPosition() {
+
+        return mCurrentPosition;
+    }
+
+    public float getmCurrentPositionOffset() {
+        return mCurrentPositionOffset;
     }
 
     public void setIndicatorColor(int indicatorColor) {
@@ -790,14 +761,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public void setTextColor(ColorStateList colorStateList) {
         this.mTabTextColor = colorStateList;
         updateTabStyles();
-    }
-
-    public boolean isAnimateIndicator() {
-        return isAnimateIndicator;
-    }
-
-    public void setIsCustomAnimateIndicatorLine(boolean isCustomAnimateIndicatorLine) {
-        this.isAnimateIndicator = isCustomAnimateIndicatorLine;
     }
 
     private ColorStateList createColorStateList(int color_state_default) {
