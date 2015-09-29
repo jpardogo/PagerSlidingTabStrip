@@ -325,7 +325,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             lineRight = (mCurrentPositionOffset * nextTabRight + (1f - mCurrentPositionOffset) * lineRight);
         }
 
-        return new Pair<>(lineLeft, lineRight);
+        return new Pair<Float, Float>(lineLeft, lineRight);
     }
 
     @Override
