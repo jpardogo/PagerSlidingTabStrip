@@ -425,7 +425,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             mRectPaint.setColor(mIndicatorColor);
             mRectPaint.setStyle(Style.FILL_AND_STROKE);
             Pair<Float, Float> lines;
-            if (isAnimateIndicator && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)) {
+            if (isAnimateIndicator) {
                 lines = getAnimatedIndicatorCoordinates();
             } else {
                 lines = getIndicatorCoordinates();
@@ -434,7 +434,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private Pair<Float, Float> getAnimatedIndicatorCoordinates() {
         // default: line below current tab
         View currentTab = mTabsContainer.getChildAt(mCurrentPosition);
@@ -445,7 +444,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             View nextTab = mTabsContainer.getChildAt(mCurrentPosition + 1);
             final float nextTabLeft = nextTab.getLeft();
             final float nextTabRight = nextTab.getRight();
-            float interpolatedOffset = getNewOffset(mCurrentPositionOffset);
+            float interpolatedOffset = getInterpolatedOffset(mCurrentPositionOffset);
 
             if (mPreviousPosition > mCurrentPosition) { // Going left
                 lineLeft = (mCurrentPositionOffset * nextTabLeft + (1f - mCurrentPositionOffset) * lineLeft);
@@ -459,7 +458,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         return new Pair<>(lineLeft, lineRight);
     }
 
-    private float getNewOffset(float offset) {
+    private float getInterpolatedOffset(float offset) {
         // y=t^2f
         double f = .1;
         return (float) Math.pow(offset, (2 * f));
