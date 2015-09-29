@@ -73,7 +73,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int mTabCount;
 
     private int mCurrentPosition = 0;
-    private int mPreviousPosition = 0;
     private float mCurrentPositionOffset = 0f;
 
     private Paint mRectPaint;
@@ -376,7 +375,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
             setPadding(mPaddingLeft, getPaddingTop(), mPaddingRight, getPaddingBottom());
             if (mScrollOffset == 0) mScrollOffset = getWidth() / 2 - mPaddingLeft;
-            mPreviousPosition = mCurrentPosition;
             mCurrentPosition = mPager.getCurrentItem();
             mCurrentPositionOffset = 0f;
             scrollToChild(mCurrentPosition, 0);
@@ -441,20 +439,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         float lineRight = currentTab.getRight();
         // if there is an offset, start interpolating left and right coordinates between current and next tab
         if (mCurrentPositionOffset > 0f && mCurrentPosition < mTabCount - 1) {
-            float fromLeft = lineLeft;
-            float fromRight = lineRight;
             View nextTab = mTabsContainer.getChildAt(mCurrentPosition + 1);
             final float nextTabLeft = nextTab.getLeft();
             final float nextTabRight = nextTab.getRight();
             float interpolatedOffset = getInterpolatedOffset(mCurrentPositionOffset);
 
-            if (mPreviousPosition > mCurrentPosition) { // Going left
-                lineLeft = fromLeft - ((fromLeft - nextTabLeft) * mCurrentPositionOffset);
-                lineRight = fromRight - ((fromRight - nextTabRight) * interpolatedOffset);
-            } else { // Going right
-                lineLeft = fromLeft + ((nextTabLeft - fromLeft) * interpolatedOffset);
-                lineRight = fromRight + ((nextTabRight - fromRight) * mCurrentPositionOffset);
-            }
+            lineLeft = lineLeft + ((nextTabLeft - lineLeft) * interpolatedOffset);
+            lineRight = lineRight + ((nextTabRight - lineRight) * mCurrentPositionOffset);
         }
 
         return new Pair<>(lineLeft, lineRight);
@@ -602,7 +593,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        mPreviousPosition = savedState.previousPosition;
         mCurrentPosition = savedState.currentPosition;
         if (mCurrentPosition != 0 && mTabsContainer.getChildCount() > 0) {
             unSelect(mTabsContainer.getChildAt(0));
@@ -615,7 +605,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState savedState = new SavedState(superState);
-        savedState.previousPosition = mPreviousPosition;
         savedState.currentPosition = mCurrentPosition;
         return savedState;
     }
