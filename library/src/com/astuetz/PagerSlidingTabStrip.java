@@ -402,7 +402,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         if (mDividerWidth > 0) {
             mDividerPaint.setStrokeWidth(mDividerWidth);
             mDividerPaint.setColor(mDividerColor);
-            mRectPaint.setStyle(Style.FILL);
             for (int i = 0; i < mTabCount - 1; i++) {
                 View tab = mTabsContainer.getChildAt(i);
                 canvas.drawLine(tab.getRight(), mDividerPadding, tab.getRight(), height - mDividerPadding, mDividerPaint);
@@ -412,14 +411,12 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         // draw underline
         if (mUnderlineHeight > 0) {
             mRectPaint.setColor(mUnderlineColor);
-            mRectPaint.setStyle(Style.FILL);
             canvas.drawRect(mPaddingLeft, height - mUnderlineHeight, mTabsContainer.getWidth() + mPaddingRight, height, mRectPaint);
         }
 
         // draw indicator line
         if (mIndicatorHeight > 0) {
             mRectPaint.setColor(mIndicatorColor);
-            mRectPaint.setStyle(Style.FILL_AND_STROKE);
             Pair<Float, Float> lines = getIndicatorCoordinates();
             canvas.drawRect(lines.first + mPaddingLeft, height - mIndicatorHeight, lines.second + mPaddingLeft, height, mRectPaint);
         }
