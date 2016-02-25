@@ -449,21 +449,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (state == ViewPager.SCROLL_STATE_IDLE) {
                 scrollToChild(mPager.getCurrentItem(), 0);
             }
-            //Full tabTextAlpha for current item
-            View currentTab = mTabsContainer.getChildAt(mPager.getCurrentItem());
-            select(currentTab);
-            //Half transparent for prev item
-            if (mPager.getCurrentItem() - 1 >= 0) {
-                View prevTab = mTabsContainer.getChildAt(mPager.getCurrentItem() - 1);
-                unSelect(prevTab);
-            }
-
-            //Half transparent for next item
-            if (mPager.getCurrentItem() + 1 <= mPager.getAdapter().getCount() - 1) {
-                View nextTab = mTabsContainer.getChildAt(mPager.getCurrentItem() + 1);
-                unSelect(nextTab);
-            }
-
             if (mDelegatePageListener != null) {
                 mDelegatePageListener.onPageScrollStateChanged(state);
             }
@@ -472,6 +457,21 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         @Override
         public void onPageSelected(int position) {
             updateSelection(position);
+            
+            //Select current item
+            View currentTab = mTabsContainer.getChildAt(position);
+            select(currentTab);
+            //Unselect prev item
+            if (position > 0) {
+                View prevTab = mTabsContainer.getChildAt(position - 1);
+                unSelect(prevTab);
+            }
+            //Unselect next item
+            if (position < mPager.getAdapter().getCount() - 1) {
+                View nextTab = mTabsContainer.getChildAt(position + 1);
+                unSelect(nextTab);
+            }
+            
             if (mDelegatePageListener != null) {
                 mDelegatePageListener.onPageSelected(position);
             }
