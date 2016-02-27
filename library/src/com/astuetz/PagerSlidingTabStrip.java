@@ -457,7 +457,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         @Override
         public void onPageSelected(int position) {
             updateSelection(position);
-
+            
             //Select current item
             View currentTab = mTabsContainer.getChildAt(position);
             select(currentTab);
@@ -471,7 +471,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 View nextTab = mTabsContainer.getChildAt(position + 1);
                 unSelect(nextTab);
             }
-
+            
             if (mDelegatePageListener != null) {
                 mDelegatePageListener.onPageSelected(position);
             }
