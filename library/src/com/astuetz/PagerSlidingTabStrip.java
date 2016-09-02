@@ -633,19 +633,19 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         return mTabPadding;
     }
 
-     public LinearLayout getmTabsContainer() {
+    public LinearLayout getTabsContainer() {
          return mTabsContainer;
      }
 
-     public int getmTabCount() {
+    public int getTabCount() {
          return mTabCount;
      }
 
-     public int getmCurrentPosition() {
+    public int getCurrentPosition() {
          return mCurrentPosition;
      }
 
-     public float getmCurrentPositionOffset() {
+    public float getCurrentPositionOffset() {
          return mCurrentPositionOffset;
      }
 
