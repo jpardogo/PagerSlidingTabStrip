@@ -329,16 +329,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if (isPaddingMiddle) {
-
+        if (isPaddingMiddle && mTabsContainer.getChildCount() > 0) {
             View view = mTabsContainer.getChildAt(0);
-
-            if (view != null) {
-                int mHalfWidthFirstTab;
-                mHalfWidthFirstTab = view.getMeasuredWidth() / 2;
-                mPaddingLeft = mPaddingRight = getWidth() / 2 - mHalfWidthFirstTab;
-            }
-
+            int halfWidthFirstTab = view.getMeasuredWidth() / 2;
+            mPaddingLeft = mPaddingRight = getWidth() / 2 - halfWidthFirstTab;
         }
 
         if (isPaddingMiddle || mPaddingLeft > 0 || mPaddingRight > 0) {
@@ -356,15 +350,18 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             setClipToPadding(false);
         }
 
-
         setPadding(mPaddingLeft, getPaddingTop(), mPaddingRight, getPaddingBottom());
-        if (mScrollOffset == 0) mScrollOffset = getWidth() / 2 - mPaddingLeft;
-        if (mPager != null) mCurrentPosition = mPager.getCurrentItem();
+        if (mScrollOffset == 0) {
+            mScrollOffset = getWidth() / 2 - mPaddingLeft;
+        }
+
+        if (mPager != null) {
+            mCurrentPosition = mPager.getCurrentItem();
+        }
+
         mCurrentPositionOffset = 0f;
         scrollToChild(mCurrentPosition, 0);
         updateSelection(mCurrentPosition);
-        invalidate();
-
         super.onLayout(changed, l, t, r, b);
     }
 
@@ -435,7 +432,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         @Override
         public void onPageSelected(int position) {
             updateSelection(position);
-            
+
             //Select current item
             View currentTab = mTabsContainer.getChildAt(position);
             select(currentTab);
@@ -449,7 +446,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 View nextTab = mTabsContainer.getChildAt(position + 1);
                 unSelect(nextTab);
             }
-            
+
             if (mDelegatePageListener != null) {
                 mDelegatePageListener.onPageSelected(position);
             }
