@@ -311,7 +311,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
-    private Pair<Float, Float> getIndicatorCoordinates() {
+    public Pair<Float, Float> getIndicatorCoordinates() {
         // default: line below current tab
         View currentTab = mTabsContainer.getChildAt(mCurrentPosition);
         float lineLeft = currentTab.getLeft();
@@ -657,6 +657,22 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public int getTabPaddingLeftRight() {
         return mTabPadding;
     }
+
+     public LinearLayout getmTabsContainer() {
+         return mTabsContainer;
+     }
+
+     public int getmTabCount() {
+         return mTabCount;
+     }
+
+     public int getmCurrentPosition() {
+         return mCurrentPosition;
+     }
+
+     public float getmCurrentPositionOffset() {
+         return mCurrentPositionOffset;
+     }
 
     public void setIndicatorColor(int indicatorColor) {
         this.mIndicatorColor = indicatorColor;
