@@ -10,39 +10,39 @@ Android Support Library.
 
 For a working implementation of this project see the `sample/` folder.
 
-1.Include the following dependency in your `build.gradle` file.
+1. Include the following dependency in your `build.gradle` file.
 
 ```groovy
-    compile 'com.jpardogo.materialtabstrip:library:1.1.0'
+compile 'com.jpardogo.materialtabstrip:library:1.1.0'
 ```
 
 Or add the library as a project. I tried to send a pull request, but looks like the original developer doesn't maintain it anymore.
 
-2.Include the `PagerSlidingTabStrip` widget in your layout. This should usually be placed above the `ViewPager` it represents.
+2. Include the `PagerSlidingTabStrip` widget in your layout. This should usually be placed above the `ViewPager` it represents.
 
 ```xml
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+<com.astuetz.PagerSlidingTabStrip
+    android:id="@+id/tabs"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary" />
 ```
 
-3.In your `onCreate` method (or `onCreateView` for a fragment), bind the widget to the `ViewPager`:
+3. In your `onCreate` method (or `onCreateView` for a fragment), bind the widget to the `ViewPager`:
 
 ```java
-  // Initialize the ViewPager and set an adapter
-  ViewPager pager = (ViewPager) findViewById(R.id.pager);
-  pager.setAdapter(new TestAdapter(getSupportFragmentManager()));
+// Initialize the ViewPager and set an adapter
+ViewPager pager = (ViewPager) findViewById(R.id.pager);
+pager.setAdapter(new TestAdapter(getSupportFragmentManager()));
 
-  // Bind the tabs to the ViewPager
-  PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-  tabs.setViewPager(pager);
+// Bind the tabs to the ViewPager
+PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+tabs.setViewPager(pager);
 ```
 
-###That's all you need to do, but if you want to use your own tabs, then....
+### That's all you need to do, but if you want to use your own tabs, then...
 
-4.If your adapter implements the interface `CustomTabProvider` you can paste your custom tab view/s.
+1. If your adapter implements the interface `CustomTabProvider` you can paste your custom tab view/s.
 
      - In case the the view returned contains the id `R.id.psts_tab_title`, this view should be a `TextView`  and
      will be used to placed the title and set the view state (pressed/selected/default).
@@ -53,12 +53,12 @@ Or add the library as a project. I tried to send a pull request, but looks like 
 
      - If your adapter doesn't implement the interface `CustomTabProvider` the default tab will be used, which is a `TextView` with id `R.id.psts_tab_title`).
 
-5.*(Optional)* If you use an `OnPageChangeListener` with your view pager
+2. *(Optional)* If you use an `OnPageChangeListener` with your view pager
      you should set it in the widget rather than on the pager directly.
 
 ```java
-   // continued from above
-   tabs.setOnPageChangeListener(mPageChangeListener);
+// continued from above
+tabs.setOnPageChangeListener(mPageChangeListener);
 ```
 
 # Customization
