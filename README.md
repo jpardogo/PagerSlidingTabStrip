@@ -73,11 +73,11 @@ Notes about some of the native attributes:
 
 Custom attributes:
 
- * `pstsIndicatorColor` Color of the sliding indicator. `textPrimaryColor` will be it's default color value.
+ * `pstsIndicatorColor` Color of the sliding indicator. `textColorPrimary` will be it's default color value.
  * `pstsIndicatorHeight`Height of the sliding indicator.
- * `pstsUnderlineColor` Color of the full-width line on the bottom of the view. `textPrimaryColor` will be it's default color value.
+ * `pstsUnderlineColor` Color of the full-width line on the bottom of the view. `textColorPrimary` will be it's default color value.
  * `pstsUnderlineHeight` Height of the full-width line on the bottom of the view.
- * `pstsDividerColor` Color of the dividers between tabs. `textPrimaryColor` will be it's default color value.
+ * `pstsDividerColor` Color of the dividers between tabs. `textColorPrimary` will be it's default color value.
  * `pstsDividerWidth` Stroke width of divider line, defaults to 0.
  * `pstsDividerPadding` Top and bottom padding of the dividers.
  * `pstsShouldExpand` If set to true, each tab is given the same weight, default false.
