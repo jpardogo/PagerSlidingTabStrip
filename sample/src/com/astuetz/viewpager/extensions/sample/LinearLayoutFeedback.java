@@ -6,12 +6,14 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
  * Created by Javier on 23/03/15.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LinearLayoutFeedback extends LinearLayout {
     private final Drawable mForegroundDrawable;
 
@@ -62,7 +64,7 @@ public class LinearLayoutFeedback extends LinearLayout {
     }
 
     @Override
-    protected boolean verifyDrawable(Drawable who) {
+    protected boolean verifyDrawable(@NonNull Drawable who) {
         return super.verifyDrawable(who) || (who == mForegroundDrawable);
     }
 
