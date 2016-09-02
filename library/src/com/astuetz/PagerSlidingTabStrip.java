@@ -16,7 +16,6 @@
 
 package com.astuetz;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -39,7 +38,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -331,6 +329,12 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        if (isPaddingMiddle && mTabsContainer.getChildCount() > 0) {
+            View view = mTabsContainer.getChildAt(0);
+            int halfWidthFirstTab = view.getMeasuredWidth() / 2;
+            mPaddingLeft = mPaddingRight = getWidth() / 2 - halfWidthFirstTab;
+        }
+
         if (isPaddingMiddle || mPaddingLeft > 0 || mPaddingRight > 0) {
             int width;
             if (isPaddingMiddle) {
@@ -346,50 +350,20 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             setClipToPadding(false);
         }
 
-        if (mTabsContainer.getChildCount() > 0) {
-            mTabsContainer
-                    .getChildAt(0)
-                    .getViewTreeObserver()
-                    .addOnGlobalLayoutListener(firstTabGlobalLayoutListener);
+        setPadding(mPaddingLeft, getPaddingTop(), mPaddingRight, getPaddingBottom());
+        if (mScrollOffset == 0) {
+            mScrollOffset = getWidth() / 2 - mPaddingLeft;
         }
 
+        if (mPager != null) {
+            mCurrentPosition = mPager.getCurrentItem();
+        }
+
+        mCurrentPositionOffset = 0f;
+        scrollToChild(mCurrentPosition, 0);
+        updateSelection(mCurrentPosition);
         super.onLayout(changed, l, t, r, b);
     }
-
-    private OnGlobalLayoutListener firstTabGlobalLayoutListener = new OnGlobalLayoutListener() {
-
-        @Override
-        public void onGlobalLayout() {
-            View view = mTabsContainer.getChildAt(0);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                removeGlobalLayoutListenerPreJB();
-            } else {
-                removeGlobalLayoutListenerJB();
-            }
-
-            if (isPaddingMiddle) {
-                int mHalfWidthFirstTab = view.getWidth() / 2;
-                mPaddingLeft = mPaddingRight = getWidth() / 2 - mHalfWidthFirstTab;
-            }
-
-            setPadding(mPaddingLeft, getPaddingTop(), mPaddingRight, getPaddingBottom());
-            if (mScrollOffset == 0) mScrollOffset = getWidth() / 2 - mPaddingLeft;
-            mCurrentPosition = mPager.getCurrentItem();
-            mCurrentPositionOffset = 0f;
-            scrollToChild(mCurrentPosition, 0);
-            updateSelection(mCurrentPosition);
-        }
-
-        @SuppressWarnings("deprecation")
-        private void removeGlobalLayoutListenerPreJB() {
-            getViewTreeObserver().removeGlobalOnLayoutListener(this);
-        }
-
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        private void removeGlobalLayoutListenerJB() {
-            getViewTreeObserver().removeOnGlobalLayoutListener(this);
-        }
-    };
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -458,7 +432,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         @Override
         public void onPageSelected(int position) {
             updateSelection(position);
-            
+
             //Select current item
             View currentTab = mTabsContainer.getChildAt(position);
             select(currentTab);
@@ -472,7 +446,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 View nextTab = mTabsContainer.getChildAt(position + 1);
                 unSelect(nextTab);
             }
-            
+
             if (mDelegatePageListener != null) {
                 mDelegatePageListener.onPageSelected(position);
             }
