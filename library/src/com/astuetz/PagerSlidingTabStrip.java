@@ -29,6 +29,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -143,7 +144,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         // get system attrs for container
         TypedArray a = context.obtainStyledAttributes(attrs, ANDROID_ATTRS);
-        int textPrimaryColor = a.getColor(TEXT_COLOR_PRIMARY, getResources().getColor(android.R.color.black));
+        int textPrimaryColor = a.getColor(TEXT_COLOR_PRIMARY, ContextCompat.getColor(context, android.R.color.black));
         mUnderlineColor = textPrimaryColor;
         mDividerColor = textPrimaryColor;
         mIndicatorColor = textPrimaryColor;
@@ -219,7 +220,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         }
 
         isCustomTabs = pager.getAdapter() instanceof CustomTabProvider;
-        pager.setOnPageChangeListener(mPageListener);
+        pager.addOnPageChangeListener(mPageListener);
         pager.getAdapter().registerDataSetObserver(mAdapterObserver);
         mAdapterObserver.setAttached(true);
         notifyDataSetChanged();
@@ -282,7 +283,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                         tab_title.setAllCaps(true);
                     } else {
-                        tab_title.setText(tab_title.getText().toString().toUpperCase(getResources().getConfiguration().locale));
+                        tab_title.setText(tab_title.getText().toString().toUpperCase());
                     }
                 }
             }
@@ -325,7 +326,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             lineRight = (mCurrentPositionOffset * nextTabRight + (1f - mCurrentPositionOffset) * lineRight);
         }
 
-        return new Pair<Float, Float>(lineLeft, lineRight);
+        return new Pair<>(lineLeft, lineRight);
     }
 
     @Override
@@ -520,11 +521,11 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             notifyDataSetChanged();
         }
 
-        public void setAttached(boolean attached) {
+        void setAttached(boolean attached) {
             this.attached = attached;
         }
 
-        public boolean isAttached() {
+        boolean isAttached() {
             return attached;
         }
     }
@@ -574,7 +575,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     static class SavedState extends BaseSavedState {
         int currentPosition;
 
-        public SavedState(Parcelable superState) {
+        SavedState(Parcelable superState) {
             super(superState);
         }
 
@@ -664,7 +665,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void setIndicatorColorResource(int resId) {
-        this.mIndicatorColor = getResources().getColor(resId);
+        this.mIndicatorColor = ContextCompat.getColor(getContext(), resId);
         invalidate();
     }
 
@@ -679,7 +680,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void setUnderlineColorResource(int resId) {
-        this.mUnderlineColor = getResources().getColor(resId);
+        this.mUnderlineColor = ContextCompat.getColor(getContext(), resId);
         invalidate();
     }
 
@@ -689,7 +690,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void setDividerColorResource(int resId) {
-        this.mDividerColor = getResources().getColor(resId);
+        this.mDividerColor = ContextCompat.getColor(getContext(), resId);
         invalidate();
     }
 
@@ -730,7 +731,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void setTextColorResource(int resId) {
-        setTextColor(getResources().getColor(resId));
+        setTextColor(ContextCompat.getColor(getContext(), resId));
     }
 
     public void setTextColor(int textColor) {
@@ -738,7 +739,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void setTextColorStateListResource(int resId) {
-        setTextColor(getResources().getColorStateList(resId));
+        setTextColor(ContextCompat.getColorStateList(getContext(), resId));
     }
 
     public void setTextColor(ColorStateList colorStateList) {
