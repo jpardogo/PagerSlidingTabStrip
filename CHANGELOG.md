@@ -1,7 +1,12 @@
 Change Log
 ==========
 
-Version 1.1.0 *(01-06-215)*
+Version 1.1.1 *(04-09-2016)*
+---------------------------------
+* Bug fixes
+* Allow create custom animation for the tab indicator line #155
+
+Version 1.1.0 *(01-06-2015)*
 ---------------------------------
 * Bug fixes
 * Rename some custom attributes.
