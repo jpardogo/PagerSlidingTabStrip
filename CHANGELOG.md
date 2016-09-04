@@ -4,6 +4,11 @@ Change Log
 Version 1.1.0 *(01-06-215)*
 ---------------------------------
 * Bug fixes
+* Allow create custom animation for the tab indicator line #155
+
+Version 1.1.0 *(01-06-215)*
+---------------------------------
+* Bug fixes
 * Rename some custom attributes.
 * Default ripple effect selector in 21+
 * Default sans-serif-medium tab's text in API 21+
