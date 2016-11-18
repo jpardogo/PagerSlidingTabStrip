@@ -200,6 +200,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         //Bottom padding for the tabs container parent view to show indicator and underline
         setTabsContainerParentViewPaddings();
 
+		setTabsLayoutParams();
+    }
+    
+    private void setTabsLayoutParams() {
         //Configure tab's container LayoutParams for either equal divided space or just wrap tabs
         mTabLayoutParams = isExpandTabs ?
                 new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1.0f) :
@@ -706,9 +710,11 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void setShouldExpand(boolean shouldExpand) {
         this.isExpandTabs = shouldExpand;
+        setTabsLayoutParams();
         if (mPager != null) {
             requestLayout();
         }
+        notifyDataSetChanged();
     }
 
     public void setAllCaps(boolean textAllCaps) {
