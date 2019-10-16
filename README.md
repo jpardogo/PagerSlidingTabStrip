@@ -1,5 +1,7 @@
 # Android PagerSlidingTabStrip (default Material Design)
 
+**This library is not maintained anymore and there will be no further releases. For most of the cases you can use [TabLayout](https://developer.android.com/reference/com/google/android/material/tabs/TabLayout) instead of this library.**
+
 Interactive paging indicator widget, compatible with the `ViewPager` from the
 Android Support Library.
 
