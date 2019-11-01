@@ -15,7 +15,7 @@ For a working implementation of this project see the `sample/` folder.
 1. Include the following dependency in your `build.gradle` file.
 
 ```groovy
-compile 'com.jpardogo.materialtabstrip:library:1.1.1'
+implementation 'com.jpardogo.materialtabstrip:library:1.1.1'
 ```
 
 Or add the library as a project. I tried to send a pull request, but looks like the original developer doesn't maintain it anymore.
